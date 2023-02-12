@@ -8,7 +8,7 @@ import users_routes from './routes/user_routes.js'
 import branches_routes from './routes/branches_routes.js'
   
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT
   
 
 // this middleware will take any json response from an express app route and parse it to a js object
