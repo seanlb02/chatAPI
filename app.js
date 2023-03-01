@@ -6,6 +6,7 @@ import cors from 'cors'
 import auth_routes from './routes/auth_routes.js' 
 import users_routes from './routes/user_routes.js' 
 import branches_routes from './routes/branches_routes.js'
+import events_routes from './routes/events_router.js'
   
 const app = express();
 const PORT = 'chatapi-production.up.railway.app'
@@ -21,6 +22,7 @@ app.use(cors())
 app.use('/auth', auth_routes)
 app.use('/users', users_routes)
 app.use('/branches', branches_routes)
+app.use('/events', events_routes)
 
 mongoose.set('strictQuery', true)
 

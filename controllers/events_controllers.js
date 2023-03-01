@@ -1,6 +1,6 @@
 
 
-export const getVenues = async function(req, res) {
+export const getEvents = async function(req, res) {
     try {
         const events = await EventsModel.find({ date: new Date()} )
         res.send(events) 
