@@ -90,7 +90,7 @@ io.on("connection", (socket) => {
 
 /////////////////////////////////////////////
 
-httpServer.listen('https://chatapi-production.up.railway.app/', (error) =>{
+httpServer.listen(process.env.PORT, (error) =>{
     if(!error)
         console.log("Server is Successfully Running, and App is listening on port "+ PORT)
     else 
