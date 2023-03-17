@@ -58,7 +58,7 @@ const httpServer = createServer(app)
 
 const io = new Server(httpServer, {
     cors:{
-        origin:['http://localhost:3000']
+        origin:'*'
     }
 })
 
@@ -75,7 +75,6 @@ io.on("connection", (socket) => {
         socket.emit('returned-message', messageEntry )
         socket.to(chatname).emit('returned-message', messageEntry )
         
-       console.log(chatname)
        
     });
     socket.on("disconnect", (socket) => {
@@ -83,7 +82,6 @@ io.on("connection", (socket) => {
     });
     socket.on("join-chat", ({chatname}) => {
         socket.join(chatname)
-        console.log(`someones in ${chatname}`)
     })
      
 }) 
