@@ -19,13 +19,19 @@ export const postBranch = async function(req, res) {
 
 export const getBranches = async function(req, res) {
     const { username } = req.params.username 
-    const { vip } = req.params.vip
+    const { chatname } = req.params.chatname
     try {
-        const branches = await BranchesModel.find({ vip_user: req.params.vip} )
+        const branches = await BranchesModel.find({ chatname: req.params.chatname} )
         res.send(branches)
     }
     catch (err) {
         res.send({"error" : err.message})
     }
+}
+
+export const getChats = async function() {
+    const { username } = req.params.username
+    // chats where username is in 'members' field/array 
+    
 }
 

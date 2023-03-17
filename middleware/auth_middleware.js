@@ -11,18 +11,30 @@ import uniqueValidator from "mongoose-unique-validator"
         //middleware is responsible for creating a new user document 
         const registerUser = async (req, res, next) => {
             //1. deconstruct the request body sent by client 
-            const { email, user, pwd} = req.body;
+            const { email, user, pwd, age} = req.body;
             //2. if client app does not send data in the request body then return an error message:
             if (!email || !user || !pwd) return res.status(400).send({'error': 'All fields are required'})
             // 3. generate salt, encrypt and salt the incoming password
             // 4. create the new user document (with password hashed/salted)
             try {
-                bcrypt.hash(pwd, saltRounds, async function (err, hash){
-                   await UsersModel.create({email: `${email}`, username: `${user}`, password: hash})
-                })
-                res.send({'success': 'new user created'})
-                next();
-                } 
+                // this is a workaround for a buggy mongoose validator... that crashes the server
+                // make a query to see if there is already a user with that username:
+                const exists = await UsersModel.find({username:user});
+
+                if (exists.length > 0) {
+                    res.status(404).send({'error': 'username is taken'});
+                    // res.send(exists)
+                }
+            
+                else {
+                    // res.send(exists)
+                    bcrypt.hash(pwd, saltRounds, async function (err, hash){
+                        await UsersModel.create({email: `${email}`, username: `${user}`, password: hash, age: `${age}`})
+                        })
+                        res.send({'success' : 'user account created!'})
+                        next();
+                }
+            }
             catch (error) {
                 if (error instanceof mongoose.Error.ValidationError)
                     {return res.status(400).send({'message': 'Username is already taken'})}
@@ -38,7 +50,7 @@ import uniqueValidator from "mongoose-unique-validator"
             // deconstruct/extract data from request body sent by client 
             const { usr, pwd } = req.body;
             // if client app does not send data in the request body then return an error message:
-            if (!usr || !pwd) return res.send({'message': 'Username and password must be provided'})
+            if (!usr || !pwd) return res.status(400).send({'message': 'Username and password must be provided'})
             // build a select statement to query mongoDB User collection for the entered username
             const foundUsername = await UsersModel.find({username: `${usr}`})
             // if username does not exist in database, then return a no-data error message:

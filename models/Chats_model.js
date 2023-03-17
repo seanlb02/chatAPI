@@ -7,7 +7,7 @@ const messagesSchema = new mongoose.Schema({
     sender: {type: String, required: true},
     content: {type: String, required: true},
     timestamp: {type: Date, required: true}
-})
+}) 
 
 const chatsSchema = new mongoose.Schema({
     chatname: {type: String, required: true, unique: true},
@@ -18,7 +18,7 @@ const chatsSchema = new mongoose.Schema({
 const ChatsModel = mongoose.model("chat", chatsSchema); 
 
 
-
+export default ChatsModel;
 // Selecting participants in client will be:
 
 // userModel.find({followers: {user: })
