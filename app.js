@@ -54,37 +54,37 @@ mongoose.connect("mongodb+srv://seanchat:Budapest123!@cluster0.cttmem1.mongodb.n
 
 ////////// web socket init ////////////////
 
-const httpServer = createServer(app)
+// const httpServer = createServer(app)
 
-const io = new Server(httpServer, {
-    cors:{
-        origin:'*'
-    }
-})
+// const io = new Server(httpServer, {
+//     cors:{
+//         origin:'*'
+//     }
+// })
 
-io.on("connection", (socket) => {
-    console.log('user entered the chat')
-    socket.on('send-message', ({messageEntry, chatname}) => {
+// io.on("connection", (socket) => {
+//     console.log('user entered the chat')
+//     socket.on('send-message', ({messageEntry, chatname}) => {
         
 
-        // store incoming data into messages model
+//         // store incoming data into messages model
 
-        addMessage(chatname, messageEntry)
+//         addMessage(chatname, messageEntry)
      
-        // // emit to all users/onlookers
-        socket.emit('returned-message', messageEntry )
-        socket.to(chatname).emit('returned-message', messageEntry )
+//         // // emit to all users/onlookers
+//         socket.emit('returned-message', messageEntry )
+//         socket.to(chatname).emit('returned-message', messageEntry )
         
        
-    });
-    socket.on("disconnect", (socket) => {
-        console.log('user left the chat')
-    });
-    socket.on("join-chat", ({chatname}) => {
-        socket.join(chatname)
-    })
+//     });
+//     socket.on("disconnect", (socket) => {
+//         console.log('user left the chat')
+//     });
+//     socket.on("join-chat", ({chatname}) => {
+//         socket.join(chatname)
+//     })
      
-}) 
+// }) 
 
 /////////////////////////////////////////////
 
