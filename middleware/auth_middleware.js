@@ -65,10 +65,10 @@ import uniqueValidator from "mongoose-unique-validator"
             try{
             if (match) {
                 // create a JWT for user that expires in 24 hrs (requiring a re-log in)
-                function getAccessToken(username){ 
-                    return jwt.sign(username,'secret', {expiresIn:'1d'})
+                function getAccessToken(user_id){ 
+                    return jwt.sign(user_id,'secret', {expiresIn:'1d'})
                 };
-                const accessToken = getAccessToken({username: usr})
+                const accessToken = getAccessToken({user_id: foundUsername[0]._id})
                 // return the token to the client:
                 res.send({ 'token' : accessToken})
                 next();
@@ -101,8 +101,8 @@ import uniqueValidator from "mongoose-unique-validator"
                 //   if  token cant be parsed, relay an error back to client 
                 if (token == null) return res.sendStatus(401)
                 //   verify the token if exists:
-                jwt.verify(token, 'secret', (err, user) => {
-                    req.params.username = user
+                jwt.verify(token, 'secret', (err, user_id) => {
+                    req.params.user_id = user_id
                     if(err){
                         res.send({'error': err.message})
                     }
@@ -129,15 +129,7 @@ import uniqueValidator from "mongoose-unique-validator"
             else {return res.send({'error': 'unauthorized access'})}
     }
 
-        const doesUserFollow = async function(req, res, next) {
-            const {username} = req.params.username
-            const {followee} = req.params.followee
-            const follows = await UsersModel.find({username: req.params.followee, followers: {username: username}})
-            if (follows.length > 0) {
-                next();
-        }
-        else {return res.send({'error': 'unauthorized access'})}
-    }
+
 
 export  {
     registerUser,
@@ -145,5 +137,4 @@ export  {
     authenticateToken,
     checkAdmin,
     checkVerified,
-    doesUserFollow,
 }

@@ -7,7 +7,7 @@ import http from 'http'
 import {Server} from 'socket.io'
 import {createServer} from 'http'
 
-
+// import routes 
 import auth_routes from './routes/auth_routes.js' 
 import users_routes from './routes/user_routes.js' 
 import branches_routes from './routes/branches_routes.js'
@@ -30,7 +30,7 @@ app.use(express.json())
 // enable cors
 app.use(cors({origin: true}))
 
-// init routes 
+// init routes/endpoints with their base url param
 app.use('/auth', auth_routes)
 app.use('/users', users_routes)
 app.use('/branches', branches_routes)
@@ -53,14 +53,15 @@ mongoose.connect("mongodb+srv://seanchat:Budapest123!@cluster0.cttmem1.mongodb.n
 .catch((err) => console.log(err))
 
 ////////// web socket init ////////////////
+// socket io binds to a http server instance which is the express app
 
-// const httpServer = createServer(app)
+const httpServer = createServer(app)
 
-// const io = new Server(httpServer, {
-//     cors:{
-//         origin:'*'
-//     }
-// })
+const io = new Server(httpServer, {
+    cors:{
+        origin:'*'
+    }
+})
 
 // io.on("connection", (socket) => {
 //     console.log('user entered the chat')
@@ -88,7 +89,7 @@ mongoose.connect("mongodb+srv://seanchat:Budapest123!@cluster0.cttmem1.mongodb.n
 
 /////////////////////////////////////////////
 
-httpServer.listen(process.env.PORT, (error) =>{
+httpServer.listen(PORT, (error) =>{
     if(!error)
         console.log("Server is Successfully Running, and App is listening on port "+ PORT)
     else 
